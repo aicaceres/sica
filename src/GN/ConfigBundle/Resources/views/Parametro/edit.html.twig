@@ -1,0 +1,41 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block content %}
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='box box-solid box-primary'>
+            <div class='box-header'>
+                <h3 class='box-title'> Parámetros del Sistema  </h3>
+            </div><!-- /.box-header -->
+            <form action="{{ path('config_inicio_update', { 'id': entity.id }) }}" method="post" role="form">
+                <div class='box-body pad'>
+                    {% include "AdminBundle::form-notification.html.twig" %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset>
+                                <div class="form-group col-sm-3">
+                                    <label for="fechaInicio" class="required">Fecha de inicio de actividades: </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="date" class="form-control Datepicker" required="required" id="fechaInicio" name="fechaInicio" value="{{entity.fechaInicio|date('Y-m-d')}}"/>
+                                    </div>
+                                </div>                                
+                            </fieldset>
+                            <div class="text-danger">
+                                <i class="fa fa-warning" ></i> <small>Si modifica la fecha de inicio de actividades las verificaciones anteriores a dicha fecha se eliminarán.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    <div class="btn-group pull-right">
+                        <button type="submit" class="btn btn-app" id="save"><i class="fa fa-save"></i> Guardar</button>
+                        <a type="button" class="btn btn-app" href="{{ path('admin_homepage')}}"><i class="fa fa-reply"></i> Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </div><!-- /.box -->
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}

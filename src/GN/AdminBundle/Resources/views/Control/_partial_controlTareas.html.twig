@@ -1,0 +1,63 @@
+    <div class="col-md-12 lista_tareas" id="{{ss.id}}" >
+        <div class="box box-solid box-danger">
+            <div class="box-header">
+                <h3 class="box-title">{{ ss.nombre }}</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-danger btn-sm close-tab" data-tabid="{{ss.id}}"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#D_{{ss.id}}" data-toggle="tab">Diarias &nbsp;<small class="badge pull-right"> {{estados[ss.id].relDiaria}} </small></a></li>
+                        <li><a href="#S_{{ss.id}}" data-toggle="tab">Semanales &nbsp;<small class="badge pull-right"> {{estados[ss.id].relSemanal}} </small></a></li>
+                        <li><a href="#M_{{ss.id}}" data-toggle="tab">Mensuales &nbsp;<small class="badge pull-right"> {{estados[ss.id].relMensual}} </small></a></li>
+                        {% if permiso %}
+                        <li class="pull-right check_all"><a href="javascript:void(0)" data-action="check_all" data-subsector="{{ss.nombre}}" class="doaction">
+                                <i class="fa fa fa-check-square-o" title="Verificar todas"></i>  <span class="title-text">Todas</span> </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="D_{{ss.id}}">
+                            <!-- TAREAS DIARIAS -->
+                            <ul class="todo-list" >
+                                {% for item in tareas if item.tipotarea=='D' and not item.verificada %}
+                                    {% include "AdminBundle:Control:_partial_item.html.twig" %}
+                                {% endfor %}
+                                {% for item in tareas if item.tipotarea=='D' and item.verificada %}
+                                    {% include "AdminBundle:Control:_partial_item.html.twig" %}
+                                {% endfor %}
+                            </ul>
+                        </div><!-- /.tab-pane -->
+                        <div class="tab-pane" id="S_{{ss.id}}">
+                            <!-- TAREAS SEMANALES -->
+                            <ul class="todo-list" >
+                                {% for item in tareas if item.tipotarea=='S' and not item.verificada %}
+                                    {% include "AdminBundle:Control:_partial_item.html.twig" %}
+                                {% endfor %}
+                                {% for item in tareas if item.tipotarea=='S' and item.verificada %}
+                                    {% include "AdminBundle:Control:_partial_item.html.twig" %}
+                                {% endfor %}
+                            </ul>
+                        </div><!-- /.tab-pane -->
+                        <div class="tab-pane" id="M_{{ss.id}}">
+                            <!-- TAREAS MENSUALES -->
+                            <ul class="todo-list" >
+                                {% for item in tareas if item.tipotarea=='M' and not item.verificada %}
+                                    {% include "AdminBundle:Control:_partial_item.html.twig" %}
+                                {% endfor %}
+                                {% for item in tareas if item.tipotarea=='M' and item.verificada %}
+                                    {% include "AdminBundle:Control:_partial_item.html.twig" %}
+                                {% endfor %}
+                            </ul>
+
+                        </div><!-- /.tab-pane -->
+                    </div><!-- /.tab-content -->
+                </div><!-- nav-tabs-custom -->
+
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+    </div>

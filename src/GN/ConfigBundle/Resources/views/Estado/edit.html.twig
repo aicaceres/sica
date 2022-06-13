@@ -1,0 +1,66 @@
+{% extends "AdminBundle::layout.html.twig" %}
+{% if entity.id  %}
+    {% set pagetitle= 'Editar Estado' %}
+    {% set urlupdate=path('parametro_estado_update', { 'id': entity.id }) %}
+{% else %}
+    {% set pagetitle= 'Alta de Nuevo Estado' %}
+    {% set urlupdate=path('parametro_estado_create') %}
+{%endif%}
+
+{% block content %}
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='box box-solid box-primary'>
+            <div class='box-header'>
+                <h3 class='box-title'> {{pagetitle}}  </h3>
+            </div><!-- /.box-header -->
+            <form action="{{urlupdate }}" method="post" role="form" {{ form_enctype(form) }}>
+                <div class='box-body pad'>
+                    {% include "AdminBundle::form-notification.html.twig" %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset>
+                                <div class="form-group col-sm-2">
+                                    {{ form_row(form.orden, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    {{ form_row(form.abreviatura, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    {{ form_row(form.nombre, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                     {{ form_row(form.andnew, { 'attr': {'class' : 'andnew' } }) }}
+                    {% if entity.id  %}
+                        <a type="button" class="btn btn-app delete" href="javascript:void(0)"><i class="fa fa-trash-o"></i> Eliminar</a>
+                    {%endif%}
+                    <div class="btn-group pull-right">
+                        <button type="submit" class="btn btn-app" id="save"><i class="fa fa-save"></i> Guardar</button>
+                        <button type="submit" class="btn btn-app" id="saveandnew"><i class="fa fa-save"></i> Guardar y Nuevo</button>
+                        <a type="button" class="btn btn-app" href="{{ path('parametro_estado')}}"><i class="fa fa-reply"></i> Cancelar</a>
+                    </div>
+                </div>
+                {{ form_rest(form) }}
+            </form>
+            {% if entity.id  %}
+                {{ form(delete_form) }}
+            {%endif%}
+        </div><!-- /.box -->
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#save,#saveandnew').on('click',function(){
+        $('.andnew').val( $(this).attr('id')=='saveandnew' );
+    });
+});
+</script>
+{% endblock %}

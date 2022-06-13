@@ -1,0 +1,73 @@
+{% if item.id %}
+    {% set itemid = item.id %}
+{% else %}    
+    {% set itemid = 0 %}
+{% endif %}    
+<li tabindex="{{item.tarea.orden}}" id="li_{{item.tarea.id}}{{itemid}}">
+    {% set personalId,nombrepersonal,nombrescompleto,long = 0,'','',0 %}
+    {% for row in item.personales %}
+        {% if row.personal.id is defined %}
+            {% set nombrepersonal = row.personal.nombre %}
+            {% set personalId = row.personal.id %}
+
+        {% else %}
+            {% set nombrepersonal = row.nombrePersonal %}
+            {% set personalId = 0 %}
+        {% endif %}   
+        {% if loop.first %}
+            {% set nombrescompleto,long = nombrepersonal,nombrepersonal|length  %}
+        {% else %}    
+            {% set nombrescompleto = nombrescompleto~', '~nombrepersonal%}
+        {% endif %}                    
+    {% endfor %}  
+    <!-- checkbox -->
+    <input type="checkbox" value="{{item.verificada}}" {% if item.verificada %} checked{% endif %} disabled>
+    <!-- todo text -->
+    <span class="text">{{ item.tarea.nombre|upper }}</span>
+    <!-- Emphasis label -->
+    <div class="fechahora"  style="display:inline-block;">
+        {% if item.verificada %}
+            <span class="label label-{% if item.alerta %}danger{%else%}success{%endif%}" title="Verificado por {{item.updatedBy.username|upper}}">
+                <span class="fecharegistro">{{item.fechahora|date('d-m-Y')}}</span> &nbsp;&nbsp;
+                <span class="horaregistro">{{item.fechahora|date('H:i')}}</span> 
+            </span>
+            <span class="label label-default"><span class="estadoregistro" data-id="{{item.estado.id}}">{{item.estado.abreviatura|upper}}</span> </span>        
+            <span class="label label-default"><span class="nombrepersonal" title="{{nombrescompleto}}" data-id="{{personalId}}">
+                    {{nombrescompleto|slice(0,long)}}{%if nombrescompleto|length>long %} ...{%endif%} </span> </span>
+            {% if permiso and item.esPropia %}
+                &nbsp;&nbsp;&nbsp;      
+                <a href="javascript:void(0)" data-li="{{item.tarea.id}}{{itemid}}" data-action="edit" data-controltarea="{{item.id}}" class="doaction">
+                    <i  class="fa fa-edit" title="Editar Registración" ></i>   </a>
+                &nbsp;&nbsp;    
+                <a href="javascript:void(0)" data-li="{{item.tarea.id}}{{itemid}}" data-action="delete" data-controltarea="{{item.id}}" class="borrar-registro">
+                    <i  class="fa fa-close" title="Borrar Registración" ></i>   </a>       
+            {% endif %}    
+        {% else %}             
+            {% if item.alerta %}
+                <span class="label label-danger"><i class="fa fa-warning"></i><span class="title-text">&nbsp; Sin Verificar</span> </span>    
+            {% else %}
+                <span class="label label-warning"><i class="fa fa-warning"></i><span class="title-text">&nbsp; Sin Verificar</span> </span>    
+            {% endif %}  
+            {% if item.ultimaVerificacion %}
+            <span class="label label-default">
+                <span>{{item.ultimaVerificacion|date('d-m-Y')}}</span> &nbsp;
+                <span>{{item.ultimaVerificacion|date('H:i')}} &nbsp;&nbsp;</span> 
+            </span>
+            {% endif %}        
+        {% endif %}        
+    </div>
+
+    <!-- General tools such as edit or delete-->
+    <div class="tools"> 
+        {% if permiso %}
+            {% if not item.verificada %}
+                <a href="javascript:void(0)" data-li="{{item.tarea.id}}{{itemid}}" data-action="check" data-tarea="{{item.tarea.id}}" class="doaction">
+                    <i  class="fa fa fa-check-square-o" title="Registrar Verificación" ></i>   </a>
+            {% else %}
+                <a href="javascript:void(0)" data-li="{{item.tarea.id}}{{itemid}}" data-action="add" data-tarea="{{item.tarea.id}}" class="doaction">
+                    <i  class="fa fa-plus" title="Agregar Registración" ></i>   </a>
+            {% endif %} 
+        {% endif %} 
+        
+    </div>                                                
+</li>        

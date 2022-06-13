@@ -1,0 +1,82 @@
+{% extends "AdminBundle::layout.html.twig" %}
+{% block stylesheets %}
+{{ parent() }}
+<!-- DATA TABLES -->
+<link href="{{ asset('assets/css/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+    {% include "AdminBundle::notification.html.twig" %}
+
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='box box-solid box-primary'>
+            <div class='box-header'>
+                <h3 class='box-title'>SUB-SECTORES</h3>
+            </div><!-- /.box-header -->
+            <div class='box-body pad'>
+                <div class="clearfix">
+                    <form id="subsectores" action="{{ path('parametro_subsector') }}" method="post" role="form">
+                    <div class="form-group col-md-6">
+                        <div>
+                            <label class="required">Sector:</label>
+                            <select id="select_sector" name="sector" class="form-control" style="width:60%; display:inline-block ">
+                            {% for sector in sectores %}
+                                <option value="{{sector.id}}" {% if sector.id == sectorId %}selected="selected"{%endif%} >{{sector}}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    </form>
+                    <a class="btn btn-danger btn-flat pull-right" href="{{ path('parametro_subsector_new') }}" title="Agregar Nuevo"><i class="fa fa-plus"></i> &nbsp;Agregar</a>
+                </div>
+                <div class="box-body table-responsive">
+                    <table id="tablelist" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Activo</th>
+                                <th class="nosort">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+               {% for entity in entities %}
+                            <tr>
+                                <td>{{ entity.nombre }}</td>
+                                <td><input type="checkbox" class="list-active" disabled="disabled" {% if entity.activo %}checked="checked"{% endif %} /></td>
+                                <td class="link-actions">
+                                    <a href="{{ path('parametro_subsector_edit', { 'id': entity.id }) }}" title="Editar"><i class="fa fa-edit"></i></a>&nbsp;
+                                    <form action="{{ path('parametro_subsector_delete', { 'id': entity.id }) }}" method="post" style="display:inline-block" >
+                                        <input type="hidden" name="_method" value="DELETE" />
+                                        {{ form_widget(deleteForms[entity.id]) }}
+                                        <a href="javascript:void(0)" title="Eliminar" data-toggle="tooltip" onclick=" $('#del{{entity.id}}').click(); "><i class="fa fa-trash-o"></i></a>&nbsp;
+                                        <button type="submit" id="del{{entity.id}}" class="hideDelete">delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+               {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div><!-- /.box -->
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<!-- DATA TABES SCRIPT -->
+<script src="{{ asset('assets/js/datatables/jquery.dataTables.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/datatables/dataTables.bootstrap.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/tables.js') }}" type="text/javascript"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#select_sector').on('change',function(){
+        $('#subsectores').submit();
+    });
+});
+</script>
+{% endblock %}

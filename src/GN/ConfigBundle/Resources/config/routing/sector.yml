@@ -1,0 +1,35 @@
+parametro_sector:
+    path:     /
+    defaults: { _controller: "ConfigBundle:Sector:index" }
+
+parametro_sector_show:
+    path:     /{id}/show
+    defaults: { _controller: "ConfigBundle:Sector:show" }
+
+parametro_sector_new:
+    path:     /new
+    defaults: { _controller: "ConfigBundle:Sector:new" }
+
+parametro_sector_create:
+    path:     /create
+    defaults: { _controller: "ConfigBundle:Sector:create" }
+    requirements: { _method: post }
+
+parametro_sector_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ConfigBundle:Sector:edit" }
+
+parametro_sector_update:
+    path:     /{id}/update
+    defaults: { _controller: "ConfigBundle:Sector:update" }
+    requirements: { _method: post|put }
+
+parametro_sector_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ConfigBundle:Sector:delete" }
+    requirements: { _method: post|delete }
+
+parametro_sector_delete_ajax:
+    pattern:  /{id}/deleteAjax
+    defaults: { _controller: "ConfigBundle:Sector:deleteAjax" }
+    requirements: { _method: post|delete }

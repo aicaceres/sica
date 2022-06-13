@@ -1,0 +1,140 @@
+{% extends "AdminBundle::layout.html.twig" %}
+{% if entity.id  %}
+    {% set pagetitle= 'Editar Sub-Sector '~entity.nombre %}
+    {% set urlupdate=path('parametro_subsector_update', { 'id': entity.id }) %}
+{% else %}
+    {% set pagetitle= 'Alta de Nuevo Sub-Sector' %}
+    {% set urlupdate=path('parametro_subsector_create') %}
+{%endif%}
+
+{% block contentheader %}
+{% endblock %}
+
+{% block content %}
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='box box-solid box-primary'>
+            <div class='box-header'>
+                <h3 class='box-title'> {{pagetitle}}  </h3>
+            </div><!-- /.box-header -->
+            <form action="{{urlupdate }}" method="post" role="form" {{ form_enctype(form) }}>
+                <div class='box-body pad'>
+                    {% include "AdminBundle::form-notification.html.twig" %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset>
+                                <div class="form-group col-md-6">
+                                    {{ form_row(form.sector, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group col-md-6">
+                                    {{ form_row(form.nombre, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 25px;">
+                                    {{ form_row(form.activo, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+<br>
+
+<div class="box box-danger">
+    <div class="box-header">
+        <h3 class="box-title">Tareas</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-danger btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        {% include "ConfigBundle:Tarea:_partial_tareas.html.twig" %}
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+
+
+
+                 </div>
+                <div class="box-footer">
+                     {{ form_row(form.andnew, { 'attr': {'class' : 'andnew' } }) }}
+                    {% if entity.id  %}
+                        <a type="button" class="btn btn-app delete" href="javascript:void(0)"><i class="fa fa-trash-o"></i> Eliminar</a>
+                    {%endif%}
+                    <div class="btn-group pull-right">
+                        <button type="submit" class="btn btn-app" id="save"><i class="fa fa-save"></i> Guardar</button>
+                        <button type="submit" class="btn btn-app" id="saveandnew"><i class="fa fa-save"></i> Guardar y Nuevo</button>
+                        <a type="button" class="btn btn-app" href="{{ path('parametro_subsector')}}"><i class="fa fa-reply"></i> Cancelar</a>
+                    </div>
+                </div>
+                <div class="hidden">{{ form_rest(form) }}</div>
+            </form>
+            {% if entity.id  %}
+                {{ form(delete_form) }}
+            {%endif%}
+        </div><!-- /.box -->
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#save,#saveandnew').on('click',function(){
+        $('.andnew').val( $(this).attr('id')=='saveandnew' );
+    });
+
+    //jQuery UI sortable for the todo list
+    $(".todo-list").sortable({
+        placeholder: "sort-highlight",
+        handle: ".handle",
+        forcePlaceholderSize: true,
+        connectWith: ".todo-list",
+        dropOnEmpty: true,
+        zIndex: 999999,
+        update: function( event, ui ) {
+            var tipo = ui.item.parent().attr('id') ;
+            var list = ui.item.parent().find('li');
+            list.each( function( index ) {
+              $( this ).find('[id$="_orden"]').val( index );
+              $( this ).find('[id$="_tipo"]').val( tipo );
+            }) ;
+        }
+    });
+
+    $('ul li').find('.link-actions').each(function() {
+        addItemFormDeleteLink($(this));
+    });
+    $('.linkAdd').on('click', function(e) {
+        e.preventDefault();
+        addNewItem( $(this).data('form') );
+    });
+
+});
+// funciones personalizas para el formulario
+ function addNewItem(ulId) {
+    var $collectionHolder = $('#'+ulId);
+    var prototype = $('#prototype').data('prototype');
+    var index = $('#prototype').data('index');
+    var newForm = prototype.replace(/itemform/g, index);
+    $collectionHolder.append(newForm);
+    $('#prototype').data('index', index + 1);
+    addItemFormDeleteLink($collectionHolder.find('.link-actions').last());
+    // setear el tipo
+    $collectionHolder.find('[id$="_tipo"]').last().val(ulId);
+    $collectionHolder.find('[id$="_orden"]').last().val( $('#prototype').data('index') );
+    $collectionHolder.find('[id$="_nombre"]').last().focus();
+
+}
+function addItemFormDeleteLink($itemFormTd) {
+    var $removeFormA = $('<a href="#" title="Eliminar" data-toggle="tooltip"><i class="fa fa-trash-o"></i></a>');
+    $itemFormTd.append($removeFormA);
+    $("[data-toggle='tooltip']").tooltip();
+    $removeFormA.on('click', function(e) {
+        if ( confirm('Desea eliminar esta tarea?') ) {
+            e.preventDefault();
+            $itemFormTd.parent().remove();
+        }
+    });
+}
+</script>
+{% endblock %}

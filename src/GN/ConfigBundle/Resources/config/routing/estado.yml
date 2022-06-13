@@ -1,0 +1,31 @@
+parametro_estado:
+    path:     /
+    defaults: { _controller: "ConfigBundle:Estado:index" }
+
+parametro_estado_new:
+    path:     /new
+    defaults: { _controller: "ConfigBundle:Estado:new" }
+
+parametro_estado_create:
+    path:     /create
+    defaults: { _controller: "ConfigBundle:Estado:create" }
+    requirements: { _method: post }
+
+parametro_estado_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ConfigBundle:Estado:edit" }
+
+parametro_estado_update:
+    path:     /{id}/update
+    defaults: { _controller: "ConfigBundle:Estado:update" }
+    requirements: { _method: post|put }
+
+parametro_estado_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ConfigBundle:Estado:delete" }
+    requirements: { _method: post|delete }
+
+parametro_estado_delete_ajax:
+    pattern:  /{id}/deleteAjax
+    defaults: { _controller: "ConfigBundle:Estado:deleteAjax" }
+    requirements: { _method: post|delete }

@@ -1,0 +1,54 @@
+<table id="tablelist" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Sector</th>
+            <th>Plantel Completo</th>
+            <th>Porcentaje</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for control in controles %}
+            <tr>
+                <td>{{ control.fecha|date('d-m-Y') }}</td>
+                <td>{{ control.sector }}</td>
+                <td>{% if control.plantelCompleto %}Si {% else %} No {% endif %} </td>
+                <td>{{ control.getEstadoControl().diaria }}</td>
+            </tr>
+            <tr id="tr_subsector_{{control.fecha|date('Ymd')~'_'~control.sector.id }}">
+                <td colspan="4" >
+                    {% for ctrltarea in control.controlTareas %}
+                        {% if loop.first or txtsector != ctrltarea.tarea.subsector %}
+                            <div> Subsector: {{ ctrltarea.tarea.subsector|upper }} </div>
+                        {% endif %}
+                    <table class="table table-bordered">
+                        <tbody>
+                        {% if loop.first or txtsector != ctrltarea.tarea.subsector %}
+                            {% set txtsector = ctrltarea.tarea.subsector %}
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Tarea</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Estado</th>
+                                <th>Personal</th>
+                            </tr>
+                        {% endif %}
+                                <tr>
+                                    <td>{{ ctrltarea.tipoTarea }}</td>
+                                    <td>{{ ctrltarea.tarea }}</td>
+                                    <td>{{ ctrltarea.fecha|date('d-m-Y') }}</td>
+                                    <td>{{ ctrltarea.hora|date('H:i') }}</td>
+                                    <td>{{ ctrltarea.estado }}</td>
+                                    <td>{% if ctrltarea.personal %} {{ ctrltarea.personal }} {%else%} {{ctrltarea.nombrePersonal}} {%endif%}</td>
+                                </tr>
+
+                        </tbody>
+                    </table>
+                    {% endfor %}
+
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

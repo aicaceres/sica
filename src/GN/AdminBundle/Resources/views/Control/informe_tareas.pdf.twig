@@ -1,0 +1,187 @@
+<pdf>
+    <dynamic-page page-size="A4" margin-left="70px" margin-right="40px" margin-top="50px">
+        <placeholders>
+            <header>
+                <div height="30px" margin-bottom="5px" >
+                    <table border.type="bottom" border.size="2" border.color="#f56954" padding-bottom="5px" >
+                        <tr>
+                            <td font-type="KaushanScript" font-size="14px" border.type="none" vertical-align="middle">
+                                <strong>SiCA </strong>
+                            </td>
+                            <td border.type="none" vertical-align="middle" text-align="right" >
+                                - Demo -
+                            </td>
+                        </tr>
+
+                    </table>
+
+                 </div>
+            </header>
+            <footer>
+                <div height="20px" width="100%" margin-top="50px" text-align="right">
+                    <page-number />
+                </div>
+            </footer>
+        </placeholders>
+
+        <div height="30px" width="100%" margin-top="0">
+            <div height="20px" text-align="center" vertical-align="middle">
+                <strong>INFORME DE TAREAS</strong>
+            </div>
+         </div>
+        <h3 font-size="11px" margin-bottom="2px" margin-top="0px" height="15px">Criterios:</h3>
+
+        <table font-size="10px" border.type="bottom" border.color="#C0C0C0">
+            <tr>
+                <td width="15 cm" border.type="none">
+                   <table margin-top="5px">
+                        <tr>
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px">
+                                Rango de Fechas: <strong>
+                                    {{ app.session.get('informeTareas').desde|date('d-m-Y') }}
+                                </strong>
+                                al <strong>
+                                    {{ app.session.get('informeTareas').hasta|date('d-m-Y') }}
+                                </strong>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td border.type="none" vertical-align="middle" padding-left="10px">
+                                {% if app.session.flashBag.has('info') %}
+                                    {% for msg in app.session.flashBag.get('info') %}
+                                        <span font-size="8px"> {{ msg }} </span>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                    </table>
+
+                   <table>
+                        <tr>
+                            {% if app.session.get('informeTareas').sectorId != 0 %}
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px">
+                                Sector: <strong>{{ filtroTxt.sectorTxt}}</strong>
+                            </td>
+                            {% endif %}
+                            {% if app.session.get('informeTareas').subSectorId != 0 %}
+                            <td height="15px" vertical-align="middle" border.type="none" padding-left="10px">
+                                SubSector: <strong>{{ filtroTxt.subsectorTxt }}</strong>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                   <table>
+                        <tr>
+                            {% if app.session.get('informeTareas').tipoTarea != '0' %}
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px">
+                                Tipo de Tarea: <strong>
+                                    {% if app.session.get('informeTareas').tipoTarea == 'D'%} Diaria
+                                    {% elseif app.session.get('informeTareas').tipoTarea == 'S' %} Semanal
+                                    {% elseif app.session.get('informeTareas').tipoTarea == 'M' %} Mensual {% endif %}
+                                </strong>
+                            </td>
+                             {% endif %}
+                             {% if app.session.get('informeTareas').tarea is not empty %}
+                            <td height="15px" vertical-align="middle" border.type="none" padding-left="10px">
+                                Tarea: <strong>{{ app.session.get('informeTareas').tarea|upper }}</strong>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                   <table>
+                        <tr>
+                            {% if app.session.get('informeTareas').verificada != '0' %}
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px">
+                                Tarea Verificada: <strong>
+                                    {% if app.session.get('informeTareas').verificada == 'S'%} SI
+                                    {% elseif app.session.get('informeTareas').verificada == 'N' %} NO {% endif %}
+                                </strong>
+                            </td>
+                             {% endif %}
+                             {% if app.session.get('informeTareas').vencida !='0' %}
+                            <td height="15px" vertical-align="middle" border.type="none" padding-left="10px">
+                                Fecha Vencida: <strong>
+                                    {% if app.session.get('informeTareas').vencida == 'S'%} SI
+                                    {% elseif app.session.get('informeTareas').vencida == 'N' %} NO {% endif %}
+                                </strong>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                   <table>
+                        <tr>
+                            {% if app.session.get('informeTareas').estadoId != 0 %}
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px">
+                                Estado: <strong>
+                                    {{ filtroTxt.estadoTxt }}
+                                </strong>
+                            </td>
+                             {% endif %}
+                             {% if app.session.get('informeTareas').personalId !=0 %}
+                            <td height="15px" vertical-align="middle" border.type="none" padding-left="10px">
+                                Personal: <strong>
+                                    {{ filtroTxt.personalTxt }}
+                                </strong>
+                            </td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                   <table margin-bottom="5px">
+                        <tr>
+                            {% if app.session.get('informeTareas').usuarioId != 0 %}
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px">
+                                Usuario: <strong>
+                                    {{ filtroTxt.usuarioTxt }}
+                                </strong>
+                            </td>
+                             {% endif %}
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <div id="separator" height="10px"></div>
+
+  {% for sect in resultado %}
+    <h3 border.type="bottom" font-size="11px" border.color="#808080" margin-bottom="0px" height="20px" ><span>{{sect.nombre|upper}} </span> <span font-size="10px">D: {{sect.diario}} - S: {{sect.semanal}} - M: {{sect.mensual}} </span> </h3>
+    {% for dia in sect.dias %}
+        {% if dia.subsectores|length >0 %}
+            <div font-size="9px" border.color="#CCCCCC" background.color="#CCCCCC"  height="15px" padding-left="10px" vertical-align="middle">
+                <strong>{{dia.fecha|date('d-m-Y')}} - {% if dia.plantelCompleto %} Plantel Completo: Si {% elseif dia.plantelCompleto is null %}  {% else %} Plantel Completo: No {% endif %}</strong>
+            </div>
+            {% for ssInfo in dia.subsectores %}
+                <div breakable="true"  padding-left="10px">
+                    <h3 font-size="9px" margin-bottom="0px" margin-top="5px" height="15px" vertical-align="middle" padding-left="10px" background.color="#eeeeee" ><span>{{ssInfo.nombre|upper}} </span> <span font-size="9px">D: {{ssInfo.diario}} - S: {{ssInfo.semanal}} - M: {{ssInfo.mensual}} </span></h3>
+                    <table margin-bottom="5px" font-size="9px" margin-top="0px" border.type="bottom" border.color="#eeeeee" >
+                        <tr>
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px"> Tipo </td>
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px"> Tarea </td>
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px"> Fecha/Hora </td>
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px"> Estado </td>
+                            <td border.type="none" height="15px" vertical-align="middle" padding-left="10px"> Personal </td>
+                        </tr>
+                    </table>
+
+
+                    {% for tarea in ssInfo.tareas %}
+                        <table margin-bottom="5px" font-size="9px" margin-top="0px">
+                            <tr>
+                                <td border.type="none" height="10px" vertical-align="middle" padding-left="10px"> {% if tarea.tipoTarea=='D'%} Diario {% elseif tarea.tipoTarea=='S'%} Semanal {% else %} Mensual {% endif %} </td>
+                                <td border.type="none" height="10px" vertical-align="middle" padding-left="10px"> {{ tarea.nombreTarea|upper }} </td>
+                                <td border.type="none" height="10px" vertical-align="middle" padding-left="10px"> {% if tarea.fechaHora is not null %} {{ tarea.fechaHora|date('d-m-Y H:i') }} {% else %} <span style="color:#888888">- sin verificar -</span> {% endif %} </td>
+                                <td border.type="none" height="10px" vertical-align="middle" padding-left="10px"> {{ tarea.estado }} </td>
+                                <td border.type="none" height="10px" vertical-align="middle" padding-left="10px"> {{tarea.personal}} </td>
+                            </tr>
+                        </table>
+
+                    {% endfor%}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endfor%}
+{% endfor %}
+
+    </dynamic-page>
+</pdf>

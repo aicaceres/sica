@@ -1,0 +1,22 @@
+   <fieldset style="padding-bottom: 3px">                        
+        <div class="col-sm-8 col-sm-offset-2">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa  fa-user"></i></span>
+                <select name="personalId" class="form-control personalId">
+                    <option value=""></option>
+                    {% for per in personal %}
+                        <option value="{{per.id}}" {% if row.personal.id is defined and row.personal.id == per.id %} selected="selected" {%endif%}>{{per.nombre}}</option>
+                    {% endfor %}
+                </select>
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-flat btnOtro" type="button">Otro</button>
+                </span>       
+            </div>
+        </div>
+        <div class="col-sm-8 col-sm-offset-2 divOtro" {%if not row.nombrePersonal %}style="display: none;"{%endif%}>
+            <div class="form-group">
+                <input name="nombre-personal" type="text" class="form-control personalNombre" 
+                       value="{{row.nombrePersonal}}" placeholder="Ingresar otro..."/> 
+            </div>
+        </div>
+    </fieldset> 

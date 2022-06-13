@@ -1,0 +1,84 @@
+
+{{ form_errors(form.tareas) }}
+<div class="clearfix">
+    <a href="javascript:void(0)" class="btn btn-danger btn-xs pull-right linkAdd_D" title="Agregar Tarea" data-form="tareas_D" data-toggle="tooltip"><i class="fa fa-plus"></i> &nbsp; Agregar</a>
+</div>
+
+<ul id="tareas_D" class="todo-list ui-sortable" data-index="{{form.tareas | length }}"
+    data-prototype="{% filter escape %}{% include 'ConfigBundle:Tarea:prototype.html.twig' with {'item':form.tareas.vars.prototype} %}{% endfilter %}">
+    {% for item in form.tareas if item.tipo=='D' %}
+    <li>
+        <!-- drag handle -->
+        <span class="handle">
+            <i class="fa fa-ellipsis-v"></i>
+        </span>
+        <!-- todo text -->
+        <span class="text">
+        {{ form_widget(item.nombre, { 'attr': {'class' : 'form-control' } }) }}
+        </span>
+        <!-- General tools such as edit or delete-->
+        <div class="tools link-actions_D">    </div>
+    </li>
+    {% endfor %}
+</ul>
+<br>
+
+<!-- codigo ejemplo para tareas -->
+<div class="row">
+                        <div class="col-xs-12 col-md-10  col-md-offset-1">
+                            <!-- Custom Tabs (Pulled to the right) -->
+                            <div class="nav-tabs-custom">
+                                <ul class="nav nav-tabs pull-right">
+                                    <li class=""><a href="#tab_mensual" data-toggle="tab">Mensuales</a></li>
+                                    <li class=""><a href="#tab_semanal" data-toggle="tab">Semanales</a></li>
+                                    <li class="active"><a href="#tab_diario" data-toggle="tab">Diarias</a></li>
+                                    <li class="pull-left header"><i class="fa fa-th"></i> Tareas</li>
+                                </ul>
+                                <div class="tab-content">
+
+                                    <div class="tab-pane active" id="tab_diario">
+
+                                        {% include 'ConfigBundle:Tarea:_partial_tareas_diarias.html.twig'  %}
+
+                                    </div><!-- /.tab-pane -->
+
+                                    <div class="tab-pane" id="tab_semanal">
+                                        <ul id="tareas_D" class="todo-list ui-sortable">
+                                        <li>
+                                            <!-- drag handle -->
+                                            <span class="handle">
+                                                <i class="fa fa-asterisk"></i>
+                                            </span>
+                                            <!-- todo text -->
+                                            <span class="text">tarea 1</span>
+
+                                            <!-- General tools such as edit or delete-->
+                                            <div class="tools">
+                                                <i class="fa fa-edit"></i>
+                                                <i class="fa fa-trash-o"></i>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <!-- drag handle -->
+                                            <span class="handle">
+                                                <i class="fa fa-asterisk"></i>
+                                            </span>
+                                            <!-- todo text -->
+                                            <span class="text">tarea 2</span>
+
+                                            <!-- General tools such as edit or delete-->
+                                            <div class="tools">
+                                                <i class="fa fa-edit"></i>
+                                                <i class="fa fa-trash-o"></i>
+                                            </div>
+                                        </li>
+                                        </ul>
+                                    </div><!-- /.tab-pane -->
+                                    <div class="tab-pane" id="tab_mensual">
+                                        {% include 'ConfigBundle:Tarea:_partial_tareas.html.twig' with {'tipotarea':'M' } %}
+                                    </div><!-- /.tab-pane -->
+                                </div><!-- /.tab-content -->
+                            </div><!-- nav-tabs-custom -->
+
+                        </div>
+                    </div>

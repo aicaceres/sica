@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+{% block body %}
+<body class="bg-black">
+    <div class="form-box" id="login-box">
+        <div class="header">
+            <img src="{{ asset('assets/img/sica_logo.jpg') }}" class="img-square" alt="Si.C.A." />
+        </div>
+        <form action="{{ path("check_path") }}" method="post">
+            <div class="footer aligncenter">
+                <h1> El Sitio </h1>
+                <h1> se encuentra </h1>
+                <h1> en Mantenimiento</h1>
+            </div>
+        </form>
+    </div>
+</body>
+{% endblock %}

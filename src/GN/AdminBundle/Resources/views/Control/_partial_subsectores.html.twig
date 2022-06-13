@@ -1,0 +1,35 @@
+{% for subsector in control.subsectoresActivos %}     
+<div class="col-sm-4 col-md-3" id="ssId{{subsector.id}}">
+    <!-- small box -->
+    <div class="small-box bg-{% if estados[subsector.id].alerta %}red{%else%}green{%endif%}">
+        <a href="javascript:void(0)" class="small-box-footer subsectorlnk" data-tabid="{{subsector.id}}">
+            <h4 style="color:#FFFFFF; font-size:16px; margin:0">
+                {{subsector.nombre}}
+            </h4>
+        </a>
+        <div class="inner"> 
+            
+            <p style="margin:0 0 2px">
+                Diario: <span class="porc-diario">{{estados[subsector.id].porcDiaria}}  </span>
+            </p>
+                        
+            <p style="margin:0 0 2px">
+                Semanal: <span class="porc-semanal"> {{estados[subsector.id].porcSemanal}} </span>        
+            </p>
+                        
+            <p style="margin:0 0 2px">
+                Mensual: <span class="porc-mensual">{{estados[subsector.id].porcMensual}} </span>    
+            </p>
+        </div>
+        
+    </div>
+</div>        
+ {% endfor %}        
+    
+
+    
+    
+    
+    
+    
+    

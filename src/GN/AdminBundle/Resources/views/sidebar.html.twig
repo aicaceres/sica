@@ -1,0 +1,66 @@
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="left-side sidebar-offcanvas">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="{{ asset('assets/img/logo2.png') }}" class="img-square" alt="Sistema de Gestión Notarial" />
+            </div>
+            <div class="pull-left info">
+                <p>{% if app.user %}{{ app.user.username }}{% endif %}</p>
+
+                <a href="{{ path('logout') }}"><i class="fa fa-power-off"></i> Cerrar Sesión</a>
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li id="homepage">
+                <a href="{{ path('admin_homepage') }}">
+                    <i class="fa fa-home"></i> <span>Inicio</span>
+                </a>
+            </li>
+            <li class="treeview">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-file-text"></i>
+                    <span>Informes</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li id="tareas"> <a href="{{ path('informe_tareas') }}"><i class="fa fa-angle-double-right"></i> Tareas</a></li>
+                     <li id="grafico"> <a href="{{ path('informe_grafico') }}"><i class="fa fa-angle-double-right"></i> Gráficos</a></li>
+                 <!--   <li id="pendientes"> <a href="{{ path('informe_pendientes') }}"><i class="fa fa-angle-double-right"></i> Pendientes</a></li>
+                 <!--   <li id="auditoria"> <a href="{{ path('informe_auditoria') }}"><i class="fa fa-angle-double-right"></i> Auditoría</a></li>-->
+                </ul>
+            </li>
+
+{% if is_granted('ROLE_ADMIN') %}
+            <li class="treeview">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-cogs"></i>
+                    <span>Configuración</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li id="sector"> <a href="{{ path('parametro_sector') }}"><i class="fa fa-angle-double-right"></i> Sectores</a></li>
+                    <li id="subsector"  style="border-bottom: 1px solid #444"> <a href="{{ path('parametro_subsector') }}"><i class="fa fa-angle-double-right"></i> Sub-Sectores</a></li>
+                    <li id="personal"> <a href="{{ path('parametro_personal') }}"><i class="fa fa-angle-double-right"></i> Personal</a></li>
+                    <li id="estado"> <a href="{{ path('parametro_estado') }}"><i class="fa fa-angle-double-right"></i> Estados</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-lock"></i>
+                    <span>Seguridad</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li id="usuario">   <a href="{{ path('seguridad_usuario') }}"><i class="fa fa-angle-double-right"></i> Usuarios</a></li>
+                    <li id="inicio">   <a href="{{ path('config_inicio') }}"><i class="fa fa-angle-double-right"></i> Parámetros</a></li>
+                </ul>
+            </li>
+ {% endif %}
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

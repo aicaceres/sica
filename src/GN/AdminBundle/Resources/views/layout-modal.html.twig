@@ -1,0 +1,29 @@
+{% extends "::base.html.twig" %}
+{% block body %}
+<body class="skin-black fixed">
+    <div id="popup"></div>
+    {% include "AdminBundle::header.html.twig" %}
+    
+    <div class="wrapper row-offcanvas row-offcanvas-left">
+        
+            <!-- Left side column. contains the logo and sidebar -->
+            {% include "AdminBundle::sidebar.html.twig" %}
+
+            <!-- Right side column. Contains the breadcrumb and content of the page -->
+            <aside class="right-side">                
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    {% block contentheader %}
+                    {% endblock %}
+                </section>
+
+                <!-- Main content -->
+                <section class="content">
+                    {% block content %}
+                    {% endblock %}
+                </section><!-- /.content -->
+            </aside><!-- /.right-side -->
+        </div><!-- ./wrapper -->
+</body>        
+{% endblock %}
+

@@ -1,0 +1,132 @@
+{% extends "AdminBundle::layout.html.twig" %}
+{% if entity.id  %}
+    {% set pagetitle= 'Editar datos de '~entity.username %}
+    {% set urlupdate=path('seguridad_usuario_update', { 'id': entity.id }) %}
+{% else %}
+    {% set pagetitle= 'Alta de Nuevo Usuario' %}
+    {% set urlupdate=path('seguridad_usuario_create') %}
+{%endif%}
+
+{% block content %}
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='box box-solid box-primary'>
+            <div class='box-header'>
+                <h3 class='box-title'> {{pagetitle}}  </h3>
+            </div><!-- /.box-header -->
+            <form action="{{urlupdate }}" method="post" role="form" {{ form_enctype(form) }}>
+                <div class='box-body pad'>
+                    {% include "AdminBundle::form-notification.html.twig" %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <fieldset>
+                                <div class="form-group">
+                                    {{ form_row(form.username, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_row(form.nombre, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_row(form.dni, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.email) }}
+                                    <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                            {{ form_widget(form.email, { 'attr': {'class' : 'form-control' } }) }}
+                                    </div>
+                                    {{ form_errors(form.email) }}
+                                </div>
+
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <fieldset>
+                                <div class="form-group">
+                                    {{ form_label(form.password.first,'Contraseña:') }}
+                                    <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            {{ form_widget(form.password.first, { 'attr': {'class' : 'form-control' } }) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.password.second,'Repetir contraseña:') }}
+                                    <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            {{ form_widget(form.password.second, { 'attr': {'class' : 'form-control' } }) }}
+                                    </div>
+
+                                </div>
+                                {{ form_errors(form.password.first) }}
+                                {% if entity.id %}
+                                <p class="text-info ">
+                                    <i class="fa fa-info-circle" ></i> <small>Dejar en blanco si no desea cambiar su contraseña</small>
+                                </p>
+                                {%endif%}
+                                <p><br></p>
+                                <div class="form-group">
+                                <label for="roles_user">Rol del Usuario:</label>
+                                    <select id="roles_user" name="roles_user" class="form-control">
+                                    {% for key,rol in roles if key!='ROLE_SUPER_ADMIN' %}
+                                        <option value="{{key}}" {% if key == entity.roles[0] %}selected="selected"{%endif%} >{{rol}}</option>
+                                    {% endfor %}
+                                    </select>
+                                </div>
+                                {% set disab=false %}
+                                {% if 'ROLE_ADMIN' in entity.roles %} {% set disab=true %} {% endif %}
+                                <div class="form-group">
+                                    {{ form_row(form.activo, { 'attr': {'class' : 'form-control', 'disabled' : disab } }) }}
+                                </div>
+
+                            </fieldset>
+                        </div>
+
+
+                         <div class="col-md-12">
+                            <fieldset>
+                        <div class="form-group">
+                           {{ form_label(form.sectores) }}
+                           <div class="controls">
+                               {{ form_widget(form.sectores, { 'attr': {'class' : 'chosen form-control',
+                                                                          'data-placeholder' : 'Seleccionar Sectores',
+                                                                          'multiple' : 'multiple' } }) }}
+                            </div>
+                       </div>
+                        </fieldset>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="box-footer">
+                    {% if entity.id  %}
+                        <a type="button" class="btn btn-app delete" href="javascript:void(0)"><i class="fa fa-trash-o"></i> Eliminar</a>
+                    {%endif%}
+                    <div class="btn-group pull-right">
+                        <button type="submit" class="btn btn-app"><i class="fa fa-save"></i> Guardar</button>
+                        <a type="button" class="btn btn-app" href="{{ path('seguridad_usuario')}}"><i class="fa fa-reply"></i> Cancelar</a>
+                    </div>
+                </div>
+                {{ form_rest(form) }}
+            </form>
+            {% if entity.id  %}
+                {{ form(delete_form) }}
+            {%endif%}
+        </div><!-- /.box -->
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<!-- chosen -->
+<link href="{{ asset('assets/chosen_v1.6.2/chosen.min.css') }}" rel="stylesheet" type="text/css" />
+<script src="{{ asset('assets/chosen_v1.6.2/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+$(".chosen").chosen();
+
+});
+</script>
+{% endblock %}

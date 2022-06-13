@@ -1,0 +1,33 @@
+
+    
+    
+
+parametro_general:
+    pattern:  /{table}
+    defaults: { _controller: "ConfigBundle:Parametro:index" }
+
+parametro_general_list:
+    pattern:  /list/{table}
+    defaults: { _controller: "ConfigBundle:Parametro:list" }   
+    
+parametro_general_new:
+    pattern:  /new/{table}
+    defaults: { _controller: "ConfigBundle:Parametro:new" }       
+    
+parametro_general_create:
+    pattern:  /create/{table}
+    defaults: { _controller: "ConfigBundle:Parametro:create" } 
+    requirements: { _method: post }
+    
+parametro_general_edit:
+    pattern:  /edit/{id}/{table}
+    defaults: { _controller: "ConfigBundle:Parametro:edit" }       
+
+parametro_general_update:
+    pattern:  /update/{table}/{id}
+    defaults: { _controller: "ConfigBundle:Parametro:update" }    
+    requirements: { _method: post|put }  
+    
+parametro_general_delete:
+    pattern:  /delete/{table}/{id}
+    defaults: { _controller: "ConfigBundle:Parametro:delete" }    

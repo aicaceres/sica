@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charset="UTF-8">
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <title>{% block title %}Si.C.A. - Demo{% endblock %}</title>
+        {% block stylesheets %}
+        <!-- bootstrap 3.0.2 -->
+        <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- font Awesome -->
+        <link href="{{ asset('assets/css/font-awesome2.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- Ionicons -->
+        <link href="{{ asset('assets/css/ionicons.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- jQuery UI -->
+        <link href="{{ asset('assets/css/smoothness/jquery-ui-1.10.4.autocomplete.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/css/smoothness/jquery-ui-1.10.4b.custom.min.css') }}" rel="stylesheet" type="text/css" />
+        <!-- Theme style -->
+        <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet" type="text/css" />
+        {% endblock %}
+        {% block head_javascripts %}
+            <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+            <!--[if lt IE 9]>
+              <script src="{{ asset('assets/js/html5shiv.min.js') }}"></script>
+              <script src="{{ asset('assets/js/respond.min.js') }}"></script>
+            <![endif]-->
+            {% block head_page_javascripts %}{% endblock %}
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block body %} {% endblock %}
+        {% block javascripts %}
+            <!-- jQuery 2.0.2 -->
+            <script src="{{ asset('assets/js/jquery.min.js') }}" type="text/javascript"></script>
+            <!-- jquery ui 1.10.3 -->
+            <script src="{{ asset('assets/js/jquery-ui-1.10.4b.custom.min.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('assets/js/jquery-ui-1.10.4.autocomplete.js') }}" type="text/javascript"></script>
+            <!-- Bootstrap -->
+            <script src="{{ asset('assets/js/bootstrap.min.js') }}" type="text/javascript"></script>
+            <!-- Admin App -->
+            <script src="{{ asset('assets/js/app.js') }}" type="text/javascript"></script>
+            <!-- Moment -->
+            <script src="{{ asset('assets/js/moment-with-locales.js') }}" type="text/javascript"></script>
+            <script src="//rawgit.com/saribe/eModal/master/dist/eModal.min.js"></script>
+        {% endblock %}
+    </body>
+</html>

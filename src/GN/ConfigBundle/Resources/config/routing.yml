@@ -1,0 +1,63 @@
+config_sector:
+    resource: "@ConfigBundle/Resources/config/routing/sector.yml"
+    prefix:   /sector
+
+config_subsector:
+    resource: "@ConfigBundle/Resources/config/routing/subsector.yml"
+    prefix:   /subsector
+
+config_personal:
+    resource: "@ConfigBundle/Resources/config/routing/personal.yml"
+    prefix:   /personal
+
+config_estado:
+    resource: "@ConfigBundle/Resources/config/routing/estado.yml"
+    prefix:   /estado
+
+
+ConfigBundle_usuario:
+        resource: "@ConfigBundle/Resources/config/routing/usuario.yml"
+        prefix:   /usuario/
+
+ConfigBundle_region:
+        resource: "@ConfigBundle/Resources/config/routing/region.yml"
+        prefix:   /region/
+
+
+
+config_inicio:
+    pattern:  /inicio
+    defaults: { _controller: "ConfigBundle:Parametro:parametro" }
+
+config_inicio_update:
+    pattern:  /update/{id}
+    defaults: { _controller: "ConfigBundle:Parametro:save" }
+    requirements: { _method: post|put }
+
+select_subsector:
+    pattern: /subsectores
+    defaults: { _controller: ConfigBundle:Utils:subSectores}
+
+## Locate
+select_provincias:
+    pattern: /provincias
+    defaults: { _controller: ConfigBundle:Utils:provincias}
+select_localidades:
+    pattern: /localidades
+    defaults: { _controller: ConfigBundle:Utils:localidades}
+get_codpostal:
+    pattern: /codPostal
+    defaults: { _controller: ConfigBundle:Utils:codPostal}
+
+## Login de usuario
+login:
+    pattern:  /ingresar
+    defaults: { _controller: ConfigBundle:Usuario:login }
+check_path:
+  pattern: /login_check
+logout:
+  pattern: /logout
+
+#mantenimiento:
+#    pattern:  /mantenimiento
+#    defaults: { _controller: ConfigBundle:Usuario:mantenimiento }

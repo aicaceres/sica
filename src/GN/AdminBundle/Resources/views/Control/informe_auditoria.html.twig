@@ -1,0 +1,46 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block content %}
+{% include "AdminBundle::notification.html.twig" %}
+<div class='row'>
+        <div class='col-md-12'>
+            <form action="{{ path('informe_auditoria') }}" method="post" role="form">
+
+
+
+            </form>
+        </div><!-- /.col-->
+    </div><!-- ./row -->
+
+<div class="box box-solid box-primary">
+    <div class="box-header">
+        <i class="fa fa-file-text" style="font-size: 24px;"></i>
+        <div class="box-title">Informe de Auditoría</div>
+
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <!-- button with a dropdown -->
+            <div class="btn-group">
+                <button class="btn btn-default printReport" title="Imprimir reporte"><i class="fa fa-print"></i> <span class="title-text">&nbsp; Imprimir</span> </button>
+            </div>
+        </div><!-- /. tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body">
+        reporte
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $('.backhome').click(function(){
+        window.location.href = '{{ path('admin_homepage') }}';
+    });
+});
+
+</script>
+{% endblock %}

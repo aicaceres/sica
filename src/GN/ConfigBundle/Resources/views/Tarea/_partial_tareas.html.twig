@@ -1,0 +1,54 @@
+
+{{ form_errors(form.tareas) }}
+<table id="subsector_tareas" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>DIARIAS <a href="javascript:void(0)" class="btn btn-danger btn-xs pull-right linkAdd" title="Agregar Tarea Diaria" data-form="D" data-toggle="tooltip"><i class="fa fa-plus"></i></a></th>
+            <th>SEMANALES <a href="javascript:void(0)" class="btn btn-danger btn-xs pull-right linkAdd" title="Agregar Tarea Semanal" data-form="S" data-toggle="tooltip"><i class="fa fa-plus"></i></a></th>
+            <th>MENSUALES <a href="javascript:void(0)" class="btn btn-danger btn-xs pull-right linkAdd" title="Agregar Tarea Mensual" data-form="M" data-toggle="tooltip"><i class="fa fa-plus"></i></a></th>
+        </tr>
+    </thead>
+    <tbody data-index="{{form.tareas | length }}" id="prototype"
+           data-prototype="{% filter escape %}{% include 'ConfigBundle:Tarea:prototype.html.twig' with {'item':form.tareas.vars.prototype} %}{% endfilter %}">
+        <tr>
+            <td style="vertical-align:top;">
+                <ul id="D" class="todo-list ui-sortable">
+                {% for item in form.tareas if item.vars.data.tipo == 'D'  %}
+                    <li>
+                        <span class="handle"> <i class="fa fa-ellipsis-v"></i> </span>
+                        <span class="text">{{ form_widget(item.nombre, { 'attr': {'class' : 'form-control' } }) }} </span>
+                        {{ form_widget(item.orden) }} {{ form_widget(item.tipo) }}
+                        <div class="tools link-actions">  </div>
+                    </li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td style="vertical-align:top;">
+                <ul id="S" class="todo-list ui-sortable">
+                {% for item in form.tareas if item.vars.data.tipo == 'S' %}
+                    <li>
+                        <span class="handle"> <i class="fa fa-ellipsis-v"></i> </span>
+                        <span class="text">{{ form_widget(item.nombre, { 'attr': {'class' : 'form-control' } }) }} </span>
+                         {{ form_widget(item.orden) }} {{ form_widget(item.tipo) }}
+                        <div class="tools link-actions">  </div>
+                    </li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td style="vertical-align:top;">
+                <ul id="M" class="todo-list ui-sortable">
+                {% for item in form.tareas if item.vars.data.tipo  == 'M' %}
+                    <li>
+                        <span class="handle"> <i class="fa fa-ellipsis-v"></i> </span>
+                        <span class="text">{{ form_widget(item.nombre, { 'attr': {'class' : 'form-control' } }) }} </span>
+                         {{ form_widget(item.orden) }} {{ form_widget(item.tipo) }}
+                        <div class="tools link-actions">  </div>
+                    </li>
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+<br>

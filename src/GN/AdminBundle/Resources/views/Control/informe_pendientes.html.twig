@@ -1,0 +1,277 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block content %}
+{% include "AdminBundle::notification.html.twig" %}
+
+
+<style>
+    .inftareas .todo-list >li{
+        padding: 5px 10px;
+        margin-bottom: 0;
+    }
+    .inftareas .todo-list >li label{
+        margin: 0;
+    }
+    .cabecera_subsector {
+        padding-top: 5px;
+    }
+    .cabecera_subsector, .detalle_subsector {
+        border-left: 2px solid #e6e7e8;
+        border-right: 2px solid #f3f4f5;
+      }
+      .cabecera_subsector .row{
+          padding:0px 10px;
+      }
+      .cabecera_subsector .title{
+          border-top: 1px solid lightgray;
+
+          padding:0px 10px;
+      }
+      .cabecera_subsector .title label{
+        font-weight: 600;
+        margin-bottom: 0px;
+      }
+    .detalle_subsector{
+        padding:0px 10px;
+    }
+    .detalle_subsector.last{
+        background-color: red;
+    }
+    .detalle_subsector .detail{
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .detalle_subsector .detail small{
+        display: inline-block;
+    }
+    .title,.detalle_subsector{
+        background-color: lightgoldenrodyellow;
+    }
+</style>
+
+<div class="box box-solid box-primary">
+    <div class="box-header">
+
+        <div class="box-title"> <i class="fa fa-filter"></i>&nbsp; <small>Criterios de Filtro</small></div>
+
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <!-- button with a dropdown -->
+            <div class="btn-group hidden">
+                <button class="btn btn-xs btn-default"><i class="fa fa-angle-down"></i> </button>
+            </div>
+        </div><!-- /. tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body">
+
+<form action="{{ path('informe_pendientes') }}" method="post" role="form">
+                <fieldset>
+                    <input type="hidden" id="opFiltro" name="_opFiltro" value="buscar"/>
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="min-width:96px;">Sectores</span>
+                            <select id="sectorId" name="_sectorId" class="form-control sector_selector">
+                                <option value="0">- Todos -</option>
+                                {% for sector in sectores if sector.activo %}
+                                    <option value="{{sector.id}}" {% if sector.id == app.session.get('informePendientes').sectorId %} selected="selected"{%endif%} >{{sector.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="min-width:96px;">Subsectores <i class="fa fa-refresh fa-spin fa-fw" style="display:none"></i></span>
+                            <select id="subSectorId" name="_subSectorId" class="form-control subsector_selector">
+                                <option value="0">- Todos -</option>
+                                {% for subSector in subSectores %}
+                                    <option value="{{subSector.id}}" {% if subSector.id == app.session.get('informeTareas').subSectorId%} selected="selected"{%endif%} >{{subSector.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                </fieldset>
+                <fieldset>
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="min-width:96px;">Tipo Tarea</span>
+                            <select id="tipoTarea" name="_tipoTarea" class="form-control">
+                                <option value="0">- Todas -</option>
+                                <option value="D" {% if app.session.get('informeTareas').tipoTarea == 'D'%} selected="selected"{%endif%} >Diaria</option>
+                                <option value="S" {% if app.session.get('informeTareas').tipoTarea == 'S'%} selected="selected"{%endif%} >Semanal</option>
+                                <option value="M" {% if app.session.get('informeTareas').tipoTarea == 'M'%} selected="selected"{%endif%} >Mensual</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="min-width:96px;">Usuario</span>
+                            <select id="usuarioId" name="_usuarioId" class="form-control">
+                                <option value="0">- Todos -</option>
+                                {% for usuario in usuarios %}
+                                    <option value="{{usuario.id}}" {% if usuario.id == app.session.get('informeTareas').usuarioId%} selected="selected"{%endif%} >{{usuario.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i> &nbsp;Desde
+                            </div>
+                            <input name="_desde" class="form-control datepicker" value="{{app.session.get('informeTareas').desde|date('d-m-Y')}}" id="fecha_ini" />
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i> &nbsp;Hasta
+                            </div>
+                            <input name="_hasta" class="form-control datepicker" value="{{app.session.get('informeTareas').hasta|date('d-m-Y')}}" id="fecha_fin" />
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <button class="btn btn-default btn-flat pull-right" type="button"><i class="fa fa-print"></i> <span class="title-text">&nbsp; Imprimir</span></a>
+                        <button class="btn btn-danger btn-flat pull-right" type="submit"><i class="fa fa-search"></i> <span class="title-text">&nbsp; Consultar</span></a>
+                    </div>
+                </fieldset>
+
+            </form>
+
+        <div class="row texto_filtro hidden">
+            <div class="col-xs-6"> <small><strong>Sector:</strong> Cocina Central</small> </div>
+            <div class="col-xs-6"> <small>SubSector: Cocina Central</small> </div>
+            <div class="col-xs-6"> <small>Usuario: Todos</small> </div>
+            <div class="col-xs-6"> <small>Personal: Todos</small> </div>
+            <div class="col-xs-6"> <small>Desde: 28-12-2016</small> </div>
+            <div class="col-xs-6"> <small>Hasta: 28-12-2016</small> </div>
+        </div>
+
+
+
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+{% for sector in filtroSectores %}
+{{ infosector[sector.id].totDiaria }}
+<br>
+{{ infosector[sector.id].verifDiaria }}
+<div class="box box-danger inftareas">
+    <div class="box-header">
+        <div class="box-title"> &nbsp; <small>{{sector.nombre|upper}}</small></div>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <!-- button with a dropdown -->
+            <div class="btn-group">
+                <button class="btn btn-xs btn-default" data-widget="collapse"><i class="fa fa-angle-down"></i> </button>
+            </div>
+        </div><!-- /. tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body no-padding-top">
+        <ul class="todo-list">
+            {% for control in controles if control.sector.id == sector.id %}
+                <li>
+                    <div class="row">
+                        <span class="col-xs-4"><label>Fecha:</label> {{control.fecha|date('d-m-Y')}}</span>
+                        <span class="col-xs-4"><label>Plantel Completo:</label> {% if control.plantelCompleto %}Si {% elseif control.plantelCompleto is null %} -- {% else %} No {% endif %} </span>
+                        <span class="col-xs-4"><label>Verificado:</label> {{ control.getEstadoControl().relDiaria }} </span>
+                    </div>
+                </li>
+                <ul class="list-unstyled">
+                    {% for ctrltarea in control.controlTareas %}
+                        {% if loop.first or txtsector != ctrltarea.tarea.subsector %}
+                            {% set txtsector = ctrltarea.tarea.subsector %}
+                            <li class="cabecera_subsector">
+                                <div class="row">
+                                    <span class="col-xs-5"><label>Subsector:</label> {{ ctrltarea.tarea.subsector|upper }}</span>
+                                    <span class="col-xs-5"><label>Verificado:</label> {{ control.getEstadoControl(ctrltarea.tarea.subsector.id).diaria }} </span>
+                                    <span class="col-xs-2"><span class="plus pull-right" id="{{control.fecha|date('Ymd')~'-'~ctrltarea.tarea.subsector.id}}" style="margin: 0" title="Ver tareas" >x</span> </span>
+                                </div>
+
+                                <div class="title subsector_{{control.fecha|date('Ymd')~'-'~ctrltarea.tarea.subsector.id}}">
+                                    <label style="width:8%">Tipo</label>
+                                    <label style="width:30%">Tarea</label>
+                                    <label style="width:18%">Fecha/Hora</label>
+                                    <label style="width:12%">Estado</label>
+                                    <label style="width:30%">Personal</label>
+                                </div>
+
+                            </li>
+                        {% endif %}
+                        <li class="detalle_subsector subsector_{{control.fecha|date('Ymd')~'-'~ctrltarea.tarea.subsector.id}}">
+                                <div class="detail">
+                                    <small style="width:8%">{% if ctrltarea.tipoTarea=='D'%} Diaria {% elseif ctrltarea.tipoTarea=='S'%} Semanal {% else %} Mensual {% endif %}</small>
+                                    <small style="width:30%">{{ ctrltarea.tarea|upper }}</small>
+                                    <small style="width:18%">{% if ctrltarea.fecha %} {{ ctrltarea.fechaHora|date('d-m-Y H:i') }} {% endif %}</small>
+                                    <small style="width:12%">{{ ctrltarea.estado }}</small>
+                                    <small style="width:30%">{% if ctrltarea.personal %} {{ ctrltarea.personal }} {%else%} {{ctrltarea.nombrePersonal}} {%endif%}</small>
+                                </div>
+                        </li>
+
+                    {% endfor%}
+                </ul>
+
+            {% endfor%}
+        </ul>
+
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+{% endfor%}
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#verificada').change(function(){
+        if($(this).val()=='S'){
+            $('.tarea_verificada').show();
+        }
+        else {
+            $('.tarea_verificada').hide();
+            $('#personalId').val('0');
+            $('#estadoId').val('0');
+            $('#usuarioId').val('0');
+        }
+    });
+    $('#verificada').change();
+
+    $(".sector_selector").change(function() {
+        var data = { sector_id: $(this).val() };
+        $('.fa-spin').show();
+        $.ajax({
+            type: 'post',
+            url: '{{ path("select_subsector") }}',
+            data: data,
+            success: function(data) {
+                var $subsector_selector = $('.subsector_selector');
+                $subsector_selector.html('<option value="0">Todos</option>');
+                for (var i = 0, total = data.length; i < total; i++) {
+                    $subsector_selector.append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
+                }
+            }
+        }).done(function() {
+            $('.fa-spin').hide();
+          });
+    });
+
+    $('.backhome').click(function(){
+        window.location.href = '{{ path('admin_homepage') }}';
+    });
+
+    $('.title,.detalle_subsector').hide();
+
+    $('.plus').click(function(){
+        trDetalle = '.subsector_'+$(this).attr('id');
+        $(trDetalle).fadeToggle("slow");
+        if( $(this).hasClass('minus') ) $(this).removeClass('minus')
+        else $(this).addClass('minus');
+    });
+});
+
+</script>
+{% endblock %}

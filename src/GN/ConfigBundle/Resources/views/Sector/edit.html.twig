@@ -1,0 +1,81 @@
+{% extends "AdminBundle::layout.html.twig" %}
+{% if entity.id  %}
+    {% set pagetitle= 'Editar Sector '~entity.nombre %}
+    {% set urlupdate=path('parametro_sector_update', { 'id': entity.id }) %}
+{% else %}
+    {% set pagetitle= 'Alta de Nuevo Sector' %}
+    {% set urlupdate=path('parametro_sector_create') %}
+{%endif%}
+
+{% block content %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />    
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='box box-solid box-primary'>
+            <div class='box-header'>
+                <h3 class='box-title'> {{pagetitle}}  </h3>
+            </div><!-- /.box-header -->
+            <form action="{{urlupdate }}" method="post" role="form" {{ form_enctype(form) }}>
+                <div class='box-body pad'>
+                    {% include "AdminBundle::form-notification.html.twig" %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset>
+                                <div class="form-group col-md-6">
+                                    {{ form_row(form.nombre, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>
+                                <div class="form-group col-md-6" style="margin-top: 25px;">
+                                    {{ form_row(form.activo, { 'attr': {'class' : 'form-control' } }) }}
+                                </div>                                
+                            </fieldset>
+                            <fieldset>
+                                <div class="form-group col-md-8 col-md-offset-2">
+                                    <div>
+                                        <label>Dias laborables:</label>
+                                        <select class="select2" multiple="multiple" data-placeholder="Seleccionar los días laborales"                                             
+                                            id="gn_configbundle_sector_dias" name="dias[]"  style="width: 100%;">
+                                            {% for key, dia in dias%}
+                                            <option value="{{key}}" {% if key in entity.diasLaborables %} selected="selected" {% endif %} >{{dia}}</option>
+                                            {% endfor %}
+                                        </select> 
+                                    </div>
+                                </div>                                
+                            </fieldset>
+                                
+                        </div>
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                     {{ form_row(form.andnew, { 'attr': {'class' : 'andnew' } }) }}
+                    {% if entity.id  %}
+                        <a type="button" class="btn btn-app delete" href="javascript:void(0)"><i class="fa fa-trash-o"></i> Eliminar</a>
+                    {%endif%}
+                    <div class="btn-group pull-right">
+                        <button type="submit" class="btn btn-app" id="save"><i class="fa fa-save"></i> Guardar</button>
+                        <button type="submit" class="btn btn-app" id="saveandnew"><i class="fa fa-save"></i> Guardar y Nuevo</button>
+                        <a type="button" class="btn btn-app" href="{{ path('parametro_sector')}}"><i class="fa fa-reply"></i> Cancelar</a>
+                    </div>
+                </div>
+                {{ form_rest(form) }}
+            </form>
+            {% if entity.id  %}
+                {{ form(delete_form) }}
+            {%endif%}
+        </div><!-- /.box -->
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#gn_configbundle_sector_dias').select2();
+    
+    $('#save,#saveandnew').on('click',function(){
+        $('.andnew').val( $(this).attr('id')=='saveandnew' );
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+parametro_personal:
+    path:     /
+    defaults: { _controller: "ConfigBundle:Personal:index" }
+
+parametro_personal_new:
+    path:     /new
+    defaults: { _controller: "ConfigBundle:Personal:new" }
+
+parametro_personal_create:
+    path:     /create
+    defaults: { _controller: "ConfigBundle:Personal:create" }
+    requirements: { _method: post }
+
+parametro_personal_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ConfigBundle:Personal:edit" }
+
+parametro_personal_update:
+    path:     /{id}/update
+    defaults: { _controller: "ConfigBundle:Personal:update" }
+    requirements: { _method: post|put }
+
+parametro_personal_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ConfigBundle:Personal:delete" }
+    requirements: { _method: post|delete }
+
+parametro_personal_delete_ajax:
+    pattern:  /{id}/deleteAjax
+    defaults: { _controller: "ConfigBundle:Personal:deleteAjax" }
+    requirements: { _method: post|delete }
+
+
+personal_suggest:
+  pattern: /suggest
+  defaults: { _controller: "ConfigBundle:Personal:getPersonalSuggest"  }     

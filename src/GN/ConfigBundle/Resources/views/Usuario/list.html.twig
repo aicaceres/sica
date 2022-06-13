@@ -1,0 +1,72 @@
+{% extends "AdminBundle::layout.html.twig" %}
+{% block stylesheets %}
+{{ parent() }}
+<!-- DATA TABLES -->
+<link href="{{ asset('assets/css/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+
+{% block content %}
+    {% include "AdminBundle::notification.html.twig" %}
+
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='box box-solid box-primary'>
+            <div class='box-header'>
+                <h3 class='box-title'>USUARIOS</h3>
+            </div><!-- /.box-header -->
+            <div class='box-body pad'>
+                <div class="clearfix">
+                    <a class="btn btn-danger btn-flat pull-right" href="{{ path('seguridad_usuario_new') }}" title="Agregar Nuevo"><i class="fa fa-user"></i> &nbsp;Agregar</a>
+                </div>
+                <div class="box-body table-responsive">
+                    <table id="tablelist" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre de Usuario</th>
+                                <th>Nombre y Apellido</th>
+                                <th class="nosort">Rol</th>
+                                <th class="nosort" style="width:30% " >Sectores</th>
+                                <th>Activo</th>
+                                <th class="nosort">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+               {% for entity in entities if entity.username!='SADMIN' %}
+                            <tr>
+                                <td>{{ entity.username }}</td>
+                                <td>{{ entity.nombre }}</td>
+                                <td>{{ roles[ entity.roles[0]] }}</td>
+                                <td>
+                                    {% for sector in entity.sectores%}
+                                        {% if loop.last %}
+                                            {{sector}}
+                                        {% else %}
+                                            {{sector}} -
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td><input type="checkbox" class="list-active" disabled="disabled" {% if entity.activo %}checked="checked"{% endif %} /></td>
+                                <td class="link-actions">
+                                    <a href="{{ path('seguridad_usuario_edit', { 'id': entity.id }) }}" title="Editar"><i class="fa fa-edit"></i></a>&nbsp;
+                                    <a href url="{{ path('seguridad_usuario_delete_ajax', { 'id': entity.id }) }}" title="Eliminar" class="delete_ajax"><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+               {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div><!-- /.box -->
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<!-- DATA TABES SCRIPT -->
+<script src="{{ asset('assets/js/datatables/jquery.dataTables.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/datatables/dataTables.bootstrap.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/tables.js') }}" type="text/javascript"></script>
+{% endblock %}

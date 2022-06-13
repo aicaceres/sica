@@ -1,0 +1,74 @@
+{% extends "AdminBundle::layout.html.twig" %}
+{% block stylesheets %}
+{{ parent() }}
+<!-- DATA TABLES -->
+<link href="{{ asset('assets/css/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %} 
+{% set table = app.request.attributes.get('table') %}
+
+{% block contentheader %}
+<h1> Parámetros </h1>
+{% endblock %}
+
+{% block content %}
+<div class='row'>
+    <div class='col-md-12'>
+        <div class="box box-solid">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3 col-sm-4">
+                        <div class="box-header">
+                            <i class="fa fa-cogs"></i>
+                            <h3 class="box-title">Generales</h3>
+                        </div>
+                        <!-- Navigation - folders-->
+                        <div style="margin-top: 15px;">
+                            <ul class="nav nav-pills nav-stacked" id="tab-parametro">
+                                <li class="header">Seleccionar</li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'CategoriaCliente' }) }}"><i class="fa fa-cog"></i> Categoría de Cliente</a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'EstadoCivil' }) }}"><i class="fa fa-cog"></i> Estado Civil </a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'JustificacionIdentidad' }) }}"><i class="fa fa-cog"></i> Justificación de Identidad</a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'Nacionalidad' }) }}"><i class="fa fa-cog"></i> Nacionalidad</a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'SituacionImpositiva' }) }}"><i class="fa fa-cog"></i> Situación Impositiva</a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'TipoContacto' }) }}"><i class="fa fa-cog"></i> Tipo Contacto</a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'TipoDocumento' }) }}"><i class="fa fa-cog"></i> Tipo Documento</a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'TipoPersona' }) }}"><i class="fa fa-cog"></i> Tipo Persona</a></li>
+                                <li><a href="{{ path('parametro_general',{ 'table': 'TipoSociedad' }) }}"><i class="fa fa-cog"></i> Tipo Sociedad</a></li>
+                            </ul>
+                        </div>
+                    </div><!-- /.col (LEFT) -->
+                    <div class="col-md-9 col-sm-8">
+
+                        <div class='box box-solid box-primary'>
+                            <div class='box-header'>
+                                <h3 class='box-title'>{{title}}</h3>
+                            </div><!-- /.box-header -->
+                            <div class='box-body pad'>
+                                {% include "AdminBundle::form-notification.html.twig" %}
+                                <div class="box-body table-responsive">
+                                        <!-- content -->
+                                </div>
+                            </div>
+                        </div><!-- /.box -->
+                    </div><!-- /.col (RIGHT) -->
+                </div><!-- /.row -->
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->        
+    </div><!-- /.col-->
+</div><!-- ./row -->
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.table-responsive').html({{ html|raw }});
+    $('.nav-pills a[href$="' + "{{ table }}" + '"]').parent('li').addClass('active');
+    
+    if(!is_mobile()){
+        alert('<');
+        $('#fechaInicio').val('{{entity.fechaInicio|date('d-m-Y')}}');
+    } 
+});   
+</script>
+{% endblock %} 

@@ -1,0 +1,46 @@
+<div class="clearfix">
+    <a id="addNew" class="btn btn-danger btn-flat pull-right" href="{{ path('parametro_region_new', { 'table': table }) }}"
+       title="Agregar Nuevo"><i class="fa fa-plus"></i> &nbsp;Agregar</a>
+</div>
+<br>
+<table id="tablelist" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="nosort"></th>
+            <th>Nombre</th>
+                {% if table != 'Pais'%}
+                    {% if table != 'Provincia'%}
+                        <th>Código Postal</th>
+                        <th>Provincia</th>
+                    {% endif %}
+                    <th>Pais</th>
+                {% endif %}
+            <th class="nosort">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+               {% for entity in entities %}
+        <tr>
+            <td>{{ entity.id }}</td>
+            <td>{{ entity.name }}</td>
+               {% if table != 'Pais'%}
+                {% if table != 'Provincia'%}
+            <td>{{ entity.codpostal }}</td>
+            <td>{{ entity.provincia }}</td>
+            <td>{{ entity.provincia.pais }}</td>
+                {% else %}
+            <td>{{ entity.pais }}</td>
+                {% endif %}
+               {% endif %}
+            <td class="link-actions">
+                <a href="{{ path('parametro_region_edit', { 'table': table, 'id': entity.id }) }}" title="Editar"><i class="fa fa-edit"></i></a>&nbsp;
+                <a href="{{ path('parametro_region_delete', { 'table': table, 'id': entity.id }) }}" title="Eliminar"><i class="fa fa-trash-o"></i></a>
+            </td>
+        </tr>
+               {% endfor %}
+    </tbody>
+</table>
+<!-- DATA TABES SCRIPT -->
+<script src="{{ asset('assets/js/datatables/jquery.dataTables.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/datatables/dataTables.bootstrap.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/js/tables.js') }}" type="text/javascript"></script>

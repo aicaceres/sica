@@ -1,0 +1,31 @@
+parametro_subsector:
+    path:     /
+    defaults: { _controller: "ConfigBundle:SubSector:index" }
+
+parametro_subsector_new:
+    path:     /new
+    defaults: { _controller: "ConfigBundle:SubSector:new" }
+
+parametro_subsector_create:
+    path:     /create
+    defaults: { _controller: "ConfigBundle:SubSector:create" }
+    requirements: { _method: post }
+
+parametro_subsector_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ConfigBundle:SubSector:edit" }
+
+parametro_subsector_update:
+    path:     /{id}/update
+    defaults: { _controller: "ConfigBundle:SubSector:update" }
+    requirements: { _method: post|put }
+
+parametro_subsector_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ConfigBundle:SubSector:delete" }
+    requirements: { _method: post|delete }
+
+parametro_subsector_delete_ajax:
+    pattern:  /{id}/deleteAjax
+    defaults: { _controller: "ConfigBundle:SubSector:deleteAjax" }
+    requirements: { _method: post|delete }

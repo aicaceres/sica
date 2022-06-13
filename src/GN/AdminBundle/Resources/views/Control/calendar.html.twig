@@ -1,0 +1,98 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- fullcalendar -->
+    <link href="{{ asset('assets/css/fullcalendar.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+{% include "AdminBundle::notification.html.twig" %}
+
+
+<div class="box box-solid box-primary">
+    <div class="box-header">
+        <i class="fa fa-calendar" style="font-size: 24px;"></i>
+        <div class="box-title">{{ sector.nombre|upper }}</div>
+
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <!-- button with a dropdown -->
+            <div class="btn-group">
+                <button class="btn btn-default backhome" title="Volver al Inicio"><i class="fa fa-home"></i> <span class="title-text">&nbsp; Volver</span> </button>
+            </div>
+        </div><!-- /. tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body no-padding">
+        <!--The calendar -->
+        <div id="calendar"></div>
+    </div><!-- /.box-body -->
+</div><!-- /.box -->
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<!-- fullCalendar -->
+<script src="{{ asset('assets/js/fullcalendar.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var today = new Date();
+    var fechaInicio = new Date('{{fechaInicio}}');
+    $('#calendar').fullCalendar({
+        selectable:true,
+        droppable: false,
+        weekMode: 'liquid',
+        select: function(start, end, allDay, jsEvent, view) {
+            if ( (start.getMonth()==view.start.getMonth())
+                    && ( start <= today )
+                    && ( fechaInicio.toISOString() < start.toISOString() ) ) {
+                var fecha = start.toISOString().substring(0, 10);
+                var dias = '{{sector.diasLaborables|raw}}';
+                if( dias.indexOf( start.getDay() ) > 0  ){
+                    window.location.href='{{ path('control_edit') }}'+'?sId='+'{{sector.id}}'+'&day='+fecha;
+                }else return false;
+            }
+        },
+        eventClick: function (calEvent, jsEvent, view) {
+            var fecha = calEvent.start.toISOString().substring(0, 10);
+            var dias = '{{sector.diasLaborables|raw}}';
+                if( dias.indexOf( start.getDay() ) > 0  ){
+                    window.location.href='{{ path('control_edit') }}'+'?sId='+'{{sector.id}}'+'&day='+fecha;
+                }else return false;
+        },
+        viewRender: function(view, element ) {
+            var sectorId = {{ sector.id }};
+            $('#calendar').fullCalendar( 'removeEvents');
+            $.ajax({
+                url: '{{path('getCalendarData')}}',
+                data: 'sectorId='+sectorId+'&mes='+view.start.getMonth()+'&anio='+view.start.getFullYear(),
+                type: 'POST',
+                dataType: 'json',
+                success: function(data){
+                   $('#calendar').fullCalendar( 'addEventSource', data.datos );
+                }
+            });
+
+        },
+        eventAfterRender: function(event, element, view)
+        {
+            $(element).find('.fc-event-title').append('<i class="fa fa-warning" title="Existen tareas sin verificar"></i>');
+            var color = $(element).css('background-color');
+            $(element).css('background-color','transparent');
+            $(element).css('border-color','transparent');
+            $(element).css('color',color);
+            var width = $(element).find('.fc-event-title').css('width').replace('px','')*1;
+            $(element).css('width',width+2+'px');
+        },
+
+    });
+
+    $('.backhome').click(function(){
+        window.location.href = '{{ path('admin_homepage') }}';
+    });
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+seguridad_usuario:
+    pattern:  /
+    defaults: { _controller: "ConfigBundle:Usuario:index" }
+
+seguridad_usuario_new:
+    pattern:  /new
+    defaults: { _controller: "ConfigBundle:Usuario:new" }
+
+seguridad_usuario_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "ConfigBundle:Usuario:edit" }
+
+seguridad_usuario_create:
+    pattern:  /create
+    defaults: { _controller: "ConfigBundle:Usuario:create" }
+    requirements: { _method: post }
+
+seguridad_usuario_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "ConfigBundle:Usuario:update" }
+    requirements: { _method: post|put }
+
+seguridad_usuario_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "ConfigBundle:Usuario:delete" }
+    requirements: { _method: post|delete }
+
+seguridad_usuario_delete_ajax:
+    pattern:  /{id}/deleteAjax
+    defaults: { _controller: "ConfigBundle:Usuario:deleteAjax" }
+    requirements: { _method: post|delete }

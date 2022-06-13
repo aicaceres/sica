@@ -1,0 +1,92 @@
+<form action="#" method="post" id="formdata">
+    <br>
+    <fieldset>
+        <input type="hidden" id="action" name="action" value="{{action}}"/>
+        <input type="hidden" id="idItem" name="idItem" value="{{idItem}}"/>
+        <input type="hidden" id="ctrlId" name="ctrlId" value="{{ctrlId}}"/>
+        <div class="form-group col-sm-4">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                <input type="date" readonly="readonly" class="form-control" id="fecha-registro" name="fecha-registro" value="{{controlTarea.fecha}}"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-3">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+                <input type="time" class="form-control" id="hora-registro" name="hora-registro" value="{{controlTarea.hora}}"/>
+            </div>
+        </div>
+        <div class="form-group col-sm-5">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-thumbs-o-up"></i></span>
+                <select id="estado" name="estado" class="form-control">
+                    {% for est in estados %}
+                        <option value="{{est.id}}" {% if controlTarea.estado.id is defined and controlTarea.estado.id == est.id %} selected="selected" {%endif%} >{{est.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </fieldset>                    
+    <br>
+    {% for row in controlTarea.personales %}       
+   <fieldset class="fieldsetPersonal" style="padding-bottom: 3px"> 
+        <input type="hidden" id="tareaPersonalId" class="tareaPersonalId" name="tareaPersonalId[]" value="{{row.id}}"/>
+        <div class="col-sm-8 col-sm-offset-2">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa  fa-user"></i></span>
+                <select name="personalId[]" class="form-control personalId">
+                    <option value=""></option>
+                    {% for per in personal %}
+                        <option value="{{per.id}}" {% if row.personal.id is defined and row.personal.id == per.id %} selected="selected" {%endif%}>{{per.nombre}}</option>
+                    {% endfor %}
+                </select>
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-flat btnOtro" type="button">Otro</button>
+                </span>       
+            </div>
+        </div>
+        <div class="col-sm-8 col-sm-offset-2 divOtro" {%if not row.nombrePersonal %}style="display: none;"{%endif%}>
+            <div class="form-group">
+                <input name="personalNombre[]" type="text" class="form-control personalNombre" 
+                       value="{{row.nombrePersonal}}" placeholder="Ingresar otro..."/> 
+            </div>
+        </div>
+    </fieldset> 
+    {% endfor %}
+    
+    <fieldset>
+        <button type="button" id="addPersonal" class="btn btn-xs btn-flat center-block pad" style="padding: 3px 10px;margin: 5px auto;"><i class="fa fa-plus"></i> Agregar</button>  
+    </fieldset>                                 
+</form>
+<script type="text/javascript"> 
+$(document).ready(function() {
+  // Datos personal
+    $('.btnOtro').on('click',function(){
+        $(this).closest('div').parent().siblings('.divOtro').toggle();                
+    });
+    
+    $(document).on('change','.personalId',function(){
+        $(this).closest('div').parent().siblings('.divOtro').find('.personalNombre').val('');
+        $(this).closest('div').parent().siblings('.divOtro').hide();
+        
+    });
+    $(document).on('input','.personalNombre',function(){
+        $(this).closest('.divOtro').siblings('div').find('.personalId option').prop("selected", false);
+    }); 
+    
+    $('#addPersonal').on('click',function(){
+        var content = $('.fieldsetPersonal').last().html();
+        var newItem = $('<fieldset class="fieldsetPersonal" style="padding-bottom: 3px">');
+        newItem.html(content);
+        newItem.find('.tareaPersonalId').val('');
+        newItem.find('.personalNombre').val('');
+        newItem.find('.divOtro').hide();
+        newItem.find('.btnOtro').on('click',function(){
+            $(this).closest('div').parent().siblings('.divOtro').toggle();                
+        });
+        newItem.find('.personalId option').prop("selected", false);
+        $('.fieldsetPersonal').last().after(newItem);
+        
+    });
+});               
+</script>                

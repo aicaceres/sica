@@ -1,0 +1,284 @@
+{% extends "AdminBundle::layout.html.twig" %}
+
+{% block content %}
+{% include "AdminBundle::notification.html.twig" %}
+<form action="{{ path('control_update', { 'id': control.id }) }}" method="post" role="form" {{ form_enctype(form) }}>
+
+    <div class="box box-solid box-primary">
+        <div class="box-header">
+            <i class="fa fa-check-square-o" style="font-size: 24px;"></i>
+            <div class="box-title"><strong>{{ control.sector.nombre|upper }}</strong>
+            {{ form_widget(form.sector, { 'attr': {'class' : 'hidden'}}) }}
+            </div>
+
+            <!-- tools box -->
+            <div class="pull-right box-tools">
+                <!-- button with a dropdown -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default backcalendar" title="Volver al Calendario"><i class="fa fa-calendar"></i> <span class="title-text">&nbsp; Volver</span> </button>
+                </div>
+            </div><!-- /. tools -->
+        </div><!-- /.box-header -->
+        <div class="box-body pad">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <fieldset>
+                        <div class="form-group col-sm-5">
+                            {{ form_widget(form.fecha, { 'attr': {'class' : 'form-control', 'readonly':'readonly',
+                                 'style':'text-transform:uppercase; font-weight: bold; text-align:center' } }) }}
+                        </div>
+                        <div class="form-group col-sm-6"  style="margin-top: 5px;">
+                            {{ form_label(form.plantelCompleto) }}
+                            {{ form_widget(form.plantelCompleto, { 'attr': {'style' : 'display:inline-block'}}) }}
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="col-md-12 pad" id="subsectores">
+                    {% include "AdminBundle:Control:_partial_subsectores.html.twig" %}
+                </div>
+                <div class="col-md-12 pad" id="control_tareas">  </div>
+            </div>
+
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+    {{ form_rest(form) }}
+</form>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+    var relaciones = null;
+    var refrescar = false;
+$(document).ready(function() {
+    $('.lista_tareas').hide();
+
+    {% if permiso %}
+    $('input[name="gn_adminbundle_control[plantelCompleto]"]').on('ifClicked', function (event) {
+        $.ajax({
+            url: '{{path('setPlantelCompleto')}}',
+            data: 'ctrlId='+{{control.id}}+'&val='+this.value,
+            type: 'POST',
+            dataType: 'json',
+            success: function(data){
+               if(data=='ERROR'){
+                   alert('No se pudo procesar el cambio.');
+               }
+            }
+        });
+    });
+    {% else %}
+    $('input[name="gn_adminbundle_control[plantelCompleto]"]').iCheck('disable');
+    {% endif %}
+
+    $(document).on('click','.nav-tabs li',function(){
+        var idTab = $(this).find('.badge').text();
+        var cant = idTab.split('/');
+        if( cant[0]>0 || cant[1]==0 ){
+           $(this).siblings('.check_all').hide();
+        }else { $(this).siblings('.check_all').show(); }
+    });
+
+    $('.subsectorlnk').click(function(){
+        var tabId = $(this).data('tabid');
+        $.ajax({
+            url: '{{path('getControlTareaTab')}}',
+            data: 'ssId='+tabId+'&ctrlId='+{{control.id}},
+            type: 'POST',
+            dataType: 'json',
+            success: function(data){
+               if(data=='ERROR'){
+                   alert('No se pudo acceder a los datos del subsector.');
+               }else{
+                   $('#control_tareas').html(data);
+                   $( "#subsectores" ).hide();
+                   $('#'+tabId).show();
+                   $('#'+tabId).find('.nav-tabs li.active').click();
+                   $('#control_tareas').find('[type="checkbox"]').iCheck({
+                                           checkboxClass: 'icheckbox_minimal'
+                                       });
+
+                }
+            }
+        });
+    });
+
+    $(document).on('click','.close-tab',function(){
+        var tabId = $(this).data('tabid');
+        if(window.refrescar){
+            var div = $('#ssId'+tabId);
+            var bg = (window.relaciones.alerta) ? 'bg-red' : 'bg-green';
+            if( !div.find('.small-box').hasClass( bg ) ){
+                div.find('.small-box').removeClass('bg-red bg-green');
+                div.find('.small-box').addClass(bg);
+            }
+             div.find('.porc-diario').text(window.relaciones.porcDiaria);
+             div.find('.porc-semanal').text(window.relaciones.porcSemanal);
+             div.find('.porc-mensual').text(window.relaciones.porcMensual);
+
+            window.refrescar = false;
+        }
+        $("#"+tabId).hide();
+        $("#subsectores").show();
+    });
+
+    $('.backcalendar').click(function(){
+        window.location.href = '{{ path('control_calendar', { 'sectorId': control.sector.id }) }}';
+    });
+    $(document).on('click','.doaction',function(){
+        var idLi = $(this).data('li');
+        var action = $(this).data('action');
+        var ctrlId = "{{control.id}}";
+        var urlbase = "{{path('getModalTarea')}}";
+        var title = subtitle = '';
+        switch (action)
+        {
+          case "check_all":
+               var title = $(this).data('subsector')+'  ';
+               var idItem = $(this).parent().siblings('li.active').find('a').attr('href');
+               switch(idItem.substr(1,2)){
+                 case 'D_':
+                     subtitle = "Tareas Diarias";
+                     break;
+                 case 'S_':
+                     subtitle = "Tareas Semanales";
+                     break;
+                 case 'M_':
+                     subtitle = "Tareas Mensuales";
+                     break;
+             }
+             idItem = idItem.substr(1);
+              break;
+
+           case 'check':
+               var idItem = $(this).data('tarea');
+               title = $(this).parent().siblings('.text').text();
+               subtitle = "  Verificar tarea.";
+               break;
+           case 'edit':
+               var idItem = $(this).data('controltarea');
+               title = $(this).parent().siblings('.text').text();
+               subtitle = "  Verificar tarea.";
+               break;
+           case 'add':
+               var idItem = $(this).data('tarea');
+               title = $(this).parent().siblings('.text').text();
+               subtitle = "  Añadir verificación de tarea.";
+               break;
+        }
+        var urldata = "action="+action+"&ctrlId="+ctrlId+'&idItem='+idItem;
+        var options = {
+           url: urlbase+"?"+urldata,
+           title:title,
+           size: eModal.size.xl,
+           subtitle: subtitle,
+           buttons: [
+               {text: 'Guardar', style: 'success', close: true,
+                   click: function(){
+                       if( isEmpty( $('#hora-registro').val() ) || (isEmpty( $('.personalNombre').val() ) && isEmpty( $('.personalId').val() ) ) ){
+                           alert('Debe completar todos los datos para continuar.');
+                           return false;
+                       }
+                       $.ajax({
+                           url: '{{path('setControlTarea')}}',
+                           data: $('#formdata').serialize(),
+                           type: 'POST',
+                           dataType: 'json',
+                           success: function(data){
+                              if(data=='ERROR'){
+                                  alert('No se pudo procesar el cambio.');
+                              }else{
+                                   window.relaciones = data.relaciones;
+                                   if( action=='check_all' ){
+                                      var todolist = $("#"+idItem).find('ul');
+                                      todolist.html( data.html );
+                                      var tab = idItem;
+                                      todolist.find('[type="checkbox"]').iCheck({
+                                           checkboxClass: 'icheckbox_minimal'
+                                       });
+                                  }else{
+                                      var ul = $('#li_'+idLi).parent('ul');
+                                      // si es check o edit borrar
+                                      if(action!='add') $('#li_'+idLi).remove();
+
+                                      var html = $(data.html);
+                                      if(data.checked)
+                                          ul.append(html);
+                                      else
+                                          ul.prepend(html);
+                                      var liId = html.attr('id');
+                                      $('#'+liId).find('[type="checkbox"]').iCheck({
+                                           checkboxClass: 'icheckbox_minimal'
+                                       });
+                                       var tab = ul.parent().attr('id');
+                                   }
+                                   setBadge(tab);
+                               }
+                           }
+                       });
+                       window.refrescar = true;
+                   } },
+               {text: 'Cancelar', style: 'danger', close: true }
+           ]
+       };
+
+       eModal.ajax(options);
+
+ });
+
+    $(document).on('click','.borrar-registro',function(){
+       if( confirm('Desea anular el registro de verificación de esta tarea?') ){
+            var id = $(this).data('controltarea');
+            $('.box-primary').append('<div class="overlay"></div><div class="loading-img"></div>');
+            var idLi = $(this).data('li');
+            $.ajax({
+                 url: '{{path('setControlTarea')}}',
+                 data: 'idItem='+id+'&action=delete',
+                 type: 'POST',
+                 dataType: 'json',
+                 success: function(data){
+                    if(data=='ERROR'){
+                        alert('No se pudo procesar el cambio.');
+                    }else{
+                        var ul = $('#li_'+idLi).parent('ul');
+                        $('#li_'+idLi).remove();
+                        if(data.html){
+                            var html = $(data.html);
+                            ul.prepend(html);
+                            var liId = html.attr('id');
+                            $('#'+liId).find('[type="checkbox"]').iCheck({
+                                 checkboxClass: 'icheckbox_minimal'
+                             });
+                        }
+                        window.relaciones = data.relaciones;
+                        var tab = ul.parent().attr('id');
+                        setBadge(tab);
+                        $('.overlay,.loading-img').remove();
+                    }
+                 }
+             });
+             window.refrescar = true;
+           }
+    });
+
+
+});
+function setBadge(tab){
+    switch(tab.substr(0,2)){
+        case 'D_':
+            var txt = relaciones.relDiaria;
+            break;
+        case 'S_':
+            var txt = relaciones.relSemanal;
+            break;
+        case 'M_':
+            var txt = relaciones.relMensual;
+            break;
+    }
+    $('li [href="#'+tab+'"]').find('.badge').text(txt);
+    $('li [href="#'+tab+'"]').parent('li').click();
+}
+</script>
+{% endblock %}

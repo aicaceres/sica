@@ -1,0 +1,29 @@
+parametro_region:
+    pattern:  /{table}
+    defaults: { _controller: "ConfigBundle:Region:index" }
+
+parametro_region_list:
+    pattern:  /list/{table}
+    defaults: { _controller: "ConfigBundle:Region:list" }   
+    
+parametro_region_new:
+    pattern:  /new/{table}
+    defaults: { _controller: "ConfigBundle:Region:new" }       
+    
+parametro_region_create:
+    pattern:  /create/{table}
+    defaults: { _controller: "ConfigBundle:Region:create" } 
+    requirements: { _method: post }
+    
+parametro_region_edit:
+    pattern:  /edit/{id}/{table}
+    defaults: { _controller: "ConfigBundle:Region:edit" }       
+
+parametro_region_update:
+    pattern:  /update/{table}/{id}
+    defaults: { _controller: "ConfigBundle:Region:update" }    
+    requirements: { _method: post|put }  
+    
+parametro_region_delete:
+    pattern:  /delete/{table}/{id}
+    defaults: { _controller: "ConfigBundle:Region:delete" }    

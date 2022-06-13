@@ -1,0 +1,67 @@
+control_calendar:
+    pattern:  /{sectorId}/calendar
+    defaults: { _controller: "AdminBundle:Control:calendar" }
+
+control_edit:
+    pattern:  /edit
+    defaults: { _controller: "AdminBundle:Control:edit" }
+
+control_create:
+    path:     /create
+    defaults: { _controller: "AdminBundle:Control:create" }
+    requirements: { _method: post }
+
+control_update:
+    path:     /{id}/update
+    defaults: { _controller: "AdminBundle:Control:update" }
+    requirements: { _method: post|put }
+
+
+informe_tareas:
+    path:   /informeTareas
+    defaults: { _controller: "AdminBundle:Informe:informeTareas" }
+informe_pendientes:
+    path:   /informePendientes
+    defaults: { _controller: "AdminBundle:Control:informePendientes" }
+informe_auditoria:
+    path:   /informeAuditoria
+    defaults: { _controller: "AdminBundle:Control:informeAuditoria" }
+
+
+informe_tareas_pdf:
+    path: /informeTareas.{_format}
+    defaults: { _controller: "AdminBundle:Informe:informeTareas", _format: 'pdf' }
+
+informe_grafico:
+    path:   /informeGrafico
+    defaults: { _controller: "AdminBundle:Informe:informeGrafico" }
+    
+
+## Ajax
+getCalendarData:
+    path: /getCalendarData
+    defaults: { _controller: "AdminBundle:Control:getCalendarData" }
+
+getControlTareaTab:
+    path: /getControlTareaTab
+    defaults: { _controller: "AdminBundle:Control:getControlTareaTab" }
+
+setPlantelCompleto:
+    path: /setPlantelCompleto
+    defaults: { _controller: "AdminBundle:Control:setPlantelCompleto" }
+
+getModalTarea:
+    path: /getModalTarea
+    defaults: { _controller: "AdminBundle:Control:getModalTarea" }
+
+setControlTarea:
+    path: /setControlTarea
+    defaults: { _controller: "AdminBundle:Control:setControlTarea" }
+
+getEstadoControl:
+    path: /getEstadoControl
+    defaults: { _controller: "AdminBundle:Control:getEstadoControl" }
+
+datosGraficoSubsector:
+    path: /datosGraficoSubsector
+    defaults: { _controller: "AdminBundle:Informe:datosGraficoSubsector" }
